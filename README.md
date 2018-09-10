@@ -1,6 +1,15 @@
 # LinearAdvanceSettingPlugin
 
-This plugin adds a setting named "Linear Advance Factor" to the Material category in the Custom print setup of Cura. By itself this setting has no effect on the created gcode, but the value of the setting can be used in the start gcode snippet, eg:
+This plugin adds a setting named "Linear Advance Factor" to the Material category in the Custom print setup of Cura.
+
+If the start gcode doesn't include an M900 statement to set the linear advance parameters, a single G-code line is added before the start G-code:
+```
+...
+M900 K{material_linear_advance_factor}
+...
+```
+
+Users may want to add more detailed M900 parameters in their start G-code snippet, eg:
 
 ```
 ...
