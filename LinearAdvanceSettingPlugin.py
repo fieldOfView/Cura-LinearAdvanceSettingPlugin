@@ -29,7 +29,7 @@ class LinearAdvanceSettingPlugin(Extension):
         }
 
         ContainerRegistry.getInstance().containerLoadComplete.connect(self._onContainerLoadComplete)
-
+        self._application.getOutputDeviceManager().writeStarted.connect(self._filterGcode)
 
     def _onContainerLoadComplete(self, container_id):
         container = ContainerRegistry.getInstance().findContainers(id = container_id)[0]
@@ -54,3 +54,43 @@ class LinearAdvanceSettingPlugin(Extension):
             material_category._children.append(linear_advance_definition)
             container._definition_cache[self._setting_key] = linear_advance_definition
             container._updateRelations(linear_advance_definition)
+
+    def _filterGcode(self, output_device):
+        scene = self._application.getController().getScene()
+
+        global_container_stack = self._application.getGlobalContainerStack()
+        if not global_container_stack:
+            return
+
+        # check if linear advance settings are already applied
+        start_gcode = global_container_stack.getProperty("machine_start_gcode", "value")
+        if "M900 " in start_gcode:
+            return
+
+        # get setting from Cura
+        linear_advance_factor = global_container_stack.getProperty(self._setting_key, "value")
+        if linear_advance_factor == 0:
+            return
+
+        gcode_dict = getattr(scene, "gcode_dict", {})
+        if not gcode_dict: # this also checks for an empty dict
+            Logger.log("w", "Scene has no gcode to process")
+            return
+
+        for plate_id in gcode_dict:
+            gcode_list = gcode_dict[plate_id]
+            if len(gcode_list) < 2:
+                Logger.log("w", "Plate %s does not contain any layers", plate_id)
+                continue
+
+            if ";LINEARADVANCEPROCESSED\n" not in gcode_list[0]:
+                gcode_list[1] = ("M900 K%d ;added by LinearAdvanceSettingPlugin\n" % linear_advance_factor) + gcode_list[1]
+                gcode_list[0] += ";LINEARADVANCEPROCESSED\n"
+                gcode_dict[plate_id] = gcode_list
+                dict_changed = True
+            else:
+                Logger.log("d", "Plate %s has already been processed", plate_id)
+                continue
+
+        if dict_changed:
+            setattr(scene, "gcode_dict", gcode_dict)
