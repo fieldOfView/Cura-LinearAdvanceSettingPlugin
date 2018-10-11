@@ -84,7 +84,7 @@ class LinearAdvanceSettingPlugin(Extension):
                 continue
 
             if ";LINEARADVANCEPROCESSED\n" not in gcode_list[0]:
-                gcode_list[1] = ("M900 K%d ;added by LinearAdvanceSettingPlugin\n" % linear_advance_factor) + gcode_list[1]
+                gcode_list[1] = ("M900 K%f ;added by LinearAdvanceSettingPlugin\n" % linear_advance_factor) + gcode_list[1]
                 gcode_list[0] += ";LINEARADVANCEPROCESSED\n"
                 gcode_dict[plate_id] = gcode_list
                 dict_changed = True
