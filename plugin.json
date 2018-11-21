@@ -1,7 +1,7 @@
 {
     "name": "Linear Advance Setting",
     "author": "fieldOfView",
-    "version": "3.5.1",
+    "version": "3.5.2",
     "description": "Adds a Linear Advance Ratio setting",
     "api": 5
 }
