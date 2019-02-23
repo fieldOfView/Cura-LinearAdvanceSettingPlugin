@@ -3,6 +3,7 @@
 
 from UM.Extension import Extension
 from UM.Application import Application
+from UM.Logger import Logger
 from UM.Settings.SettingDefinition import SettingDefinition
 from UM.Settings.DefinitionContainer import DefinitionContainer
 from UM.Settings.ContainerRegistry import ContainerRegistry
