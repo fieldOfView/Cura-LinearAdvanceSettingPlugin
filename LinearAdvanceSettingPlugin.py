@@ -78,6 +78,8 @@ class LinearAdvanceSettingPlugin(Extension):
             Logger.log("w", "Scene has no gcode to process")
             return
 
+        dict_changed = False
+
         for plate_id in gcode_dict:
             gcode_list = gcode_dict[plate_id]
             if len(gcode_list) < 2:
