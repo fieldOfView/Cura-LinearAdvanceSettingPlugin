@@ -24,8 +24,7 @@ class LinearAdvanceSettingPlugin(Extension):
             "description": "Sets the advance extrusion factors for Linear Advance. Note that unless this setting is used in a start gcode snippet, it has no effect!",
             "type": "float",
             "default_value": 1,
-            "minimum_value": "0.001",
-            "minimum_value_warning": "0.1",
+            "minimum_value": "0",
             "maximum_value_warning": "2.0",
             "settable_per_mesh": False,
             "settable_per_extruder": True,
@@ -77,7 +76,7 @@ class LinearAdvanceSettingPlugin(Extension):
         some_factors_set = False
         for extruder_stack in used_extruder_stacks:
             linear_advance_factor = extruder_stack.getProperty(self._setting_key, "value")
-            if linear_advance_factor != 1:
+            if linear_advance_factor != 0:
                 some_factors_set = True
         if not some_factors_set:
             Logger.log("d", "No used extruders specify a linear advance factor")
@@ -99,8 +98,9 @@ class LinearAdvanceSettingPlugin(Extension):
             if ";LINEARADVANCEPROCESSED\n" not in gcode_list[0]:
                 for extruder_stack in used_extruder_stacks:
                     linear_advance_factor = extruder_stack.getProperty(self._setting_key, "value")
-                    extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
-                    gcode_list[1] = ("M900 K%f T%d;added by LinearAdvanceSettingPlugin\n" % (linear_advance_factor, extruder_nr)) + gcode_list[1]
+                    if linear_advance_factor != 0:
+                        extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
+                        gcode_list[1] = ("M900 K%f T%d ;added by LinearAdvanceSettingPlugin\n" % (linear_advance_factor, extruder_nr)) + gcode_list[1]
                 gcode_list[0] += ";LINEARADVANCEPROCESSED\n"
                 gcode_dict[plate_id] = gcode_list
                 dict_changed = True
