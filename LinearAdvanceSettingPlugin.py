@@ -21,9 +21,9 @@ class LinearAdvanceSettingPlugin(Extension):
         self._setting_key = "material_linear_advance_factor"
         self._setting_dict = {
             "label": "Linear Advance Factor",
-            "description": "Sets the advance extrusion factors for Linear Advance. Note that unless this setting is used in a start gcode snippet, it has no effect!",
+            "description": "Sets the advance extrusion factors for Linear Advance. Setting it to 0 instructs Marlin to not apply any linear advance compensation.",
             "type": "float",
-            "default_value": 1,
+            "default_value": 0,
             "minimum_value": "0",
             "maximum_value_warning": "2.0",
             "settable_per_mesh": False,
