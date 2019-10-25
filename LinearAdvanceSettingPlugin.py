@@ -259,9 +259,6 @@ class LinearAdvanceSettingPlugin(Extension):
         if not isinstance(category, SettingDefinition):
             if len(category) > 0:
                 category = category[0]
-                Logger.log("d", "Insertion: rewrited, %s", category.key)
-
-        Logger.log("d", "Insertion: %s . %s", category.key, setting_key)
 
         setting_definition = SettingDefinition(setting_key, container, category, self._i18n_catalog)
         setting_definition.deserialize(setting_dict)
@@ -293,12 +290,6 @@ class LinearAdvanceSettingPlugin(Extension):
         global_container_stack = self._application.getGlobalContainerStack()
         used_extruder_stacks = self._application.getExtruderManager().getUsedExtruderStacks()
         if not global_container_stack or not used_extruder_stacks:
-            return
-
-        # check if linear advance settings are already applied
-        start_gcode = global_container_stack.getProperty("machine_start_gcode", "value")
-        if "M900 " in start_gcode:
-            Logger.log("d", "Start GCode already includes a linear advance snippet")
             return
 
         # get setting from Cura
@@ -347,7 +338,7 @@ class LinearAdvanceSettingPlugin(Extension):
 
                             for extruder_stack in used_extruder_stacks:
                                 linear_advance_factor = extruder_stack.getProperty(settings_key, "value")
-                                if linear_advance_factor != 0:
+                                if linear_advance_factor is not None:
                                     extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
                                     lines.insert(line_nr + 1, "M900 K%f T%d ;added by LinearAdvanceSettingPlugin" % (linear_advance_factor, extruder_nr))
                                     lines_changed = True
