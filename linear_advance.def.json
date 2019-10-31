@@ -1,7 +1,7 @@
 {
     "material_linear_advance_factor": {
         "label": "Linear Advance Factor",
-        "description": "Sets the advance extrusion factors for Linear Advance. Setting it to 0 instructs Marlin to not apply any linear advance compensation.",
+        "description": "Sets the advance extrusion factor for Linear Advance. A value of '0' means no linear advance compensation is applied.",
         "type": "float",
         "default_value": 0,
         "minimum_value": "0",
@@ -12,7 +12,7 @@
         "children": {
             "material_linear_advance_factor_infill": {
                 "label": "Infill Linear Advance Factor",
-                "description": "The Linear Advance Factor with which infill is printed.",
+                "description": "The Linear Advance Factor used when printing infill. A value of '0' means no linear advance compensation is applied for this feature.",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -26,7 +26,7 @@
             },
             "material_linear_advance_factor_wall": {
                 "label": "Wall Linear Advance Factor",
-                "description": "The Linear Advance Factor with which the walls are printed.",
+                "description": "The Linear Advance Factor used when printing walls. A value of '0' means no linear advance compensation is applied for this feature.",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -38,7 +38,7 @@
                 "children": {
                     "material_linear_advance_factor_wall_0": {
                         "label": "Outer Wall Linear Advance Factor",
-                        "description": "The Linear Advance Factor with which the outermost walls are printed.",
+                        "description": "The Linear Advance Factor used when printing the outermost wall. A value of '0' means no linear advance compensation is applied for this feature.",
                         "type": "float",
                         "default_value": 0,
                         "minimum_value": "0",
@@ -51,7 +51,7 @@
                     },
                     "material_linear_advance_factor_wall_x": {
                         "label": "Inner Wall Linear Advance Factor",
-                        "description": "The Linear Advance Factor with which all inner walls are printed.",
+                        "description": "The Linear Advance Factor used when printing all inner walls. A value of '0' means no linear advance compensation is applied for this feature.",
                         "type": "float",
                         "default_value": 0,
                         "minimum_value": "0",
@@ -66,7 +66,7 @@
             },
             "material_linear_advance_factor_topbottom": {
                 "label": "Top/Bottom Skin Linear Advance Factor",
-                "description": "The Linear Advance Factor with which top/bottom skin layers are printed.",
+                "description": "The Linear Advance Factor used when printing top/bottom skin layers. A value of '0' means no linear advance compensation is applied for this feature.",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -79,7 +79,7 @@
             },
             "material_linear_advance_factor_support": {
                 "label": "Support Linear Advance Factor",
-                "description": "The Linear Advance Factor with which the support structure is printed.",
+                "description": "The Linear Advance Factor used when printing support structures. A value of '0' means no linear advance compensation is applied for this feature.",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -93,7 +93,7 @@
             },
             "material_linear_advance_factor_support_interface": {
                 "label": "Support Interface Linear Advance Factor",
-                "description": "The Linear Advance Factor with which the roofs and floors of support are printed.",
+                "description": "The Linear Advance Factor used when printing support interfaces. A value of '0' means no linear advance compensation is applied for this feature.",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -107,7 +107,7 @@
             },
             "material_linear_advance_factor_prime_tower": {
                 "label": "Prime Tower Linear Advance Factor",
-                "description": "The Linear Advance Factor with which the prime tower is printed.",
+                "description": "The Linear Advance Factor used when printing the prime tower. A value of '0' means no linear advance compensation is applied for this feature.",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -120,7 +120,7 @@
             },
             "material_linear_advance_factor_skirt_brim": {
                 "label": "Skirt/Brim Linear Advance Factor",
-                "description": "The Linear Advance Factor with which the skirt and brim are printed.",
+                "description": "The Linear Advance Factor used when printing adhesion skirts or brims. A value of '0' means no linear advance compensation is applied for this feature.",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
