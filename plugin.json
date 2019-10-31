@@ -2,6 +2,7 @@
     "name": "Linear Advance Setting",
     "author": "fieldOfView",
     "version": "master",
-    "description": "Adds a Linear Advance Ratio setting that can be used in start gcode snippets",
-    "api": 5
+    "description": "Adds a Linear Advance Ratio setting",
+    "api": 5,
+    "supported_sdk_versions": ["5.0.0", "6.0.0"]
 }

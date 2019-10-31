@@ -3,6 +3,7 @@
 
 from UM.Extension import Extension
 from UM.Application import Application
+from UM.Logger import Logger
 from UM.Settings.SettingDefinition import SettingDefinition
 from UM.Settings.DefinitionContainer import DefinitionContainer
 from UM.Settings.ContainerRegistry import ContainerRegistry
@@ -20,11 +21,13 @@ class LinearAdvanceSettingPlugin(Extension):
         self._setting_key = "material_linear_advance_factor"
         self._setting_dict = {
             "label": "Linear Advance Factor",
-            "description": "Sets the advance extrusion factors for Linear Advance. Note that unless this setting is used in a start gcode snippet, it has no effect!",
+            "description": "Sets the advance extrusion factors for Linear Advance. Setting it to 0 instructs Marlin to not apply any linear advance compensation.",
             "type": "float",
             "default_value": 0,
+            "minimum_value": "0",
+            "maximum_value_warning": "2.0",
             "settable_per_mesh": False,
-            "settable_per_extruder": False,
+            "settable_per_extruder": True,
             "settable_per_meshgroup": False
         }
 
@@ -59,23 +62,32 @@ class LinearAdvanceSettingPlugin(Extension):
         scene = self._application.getController().getScene()
 
         global_container_stack = self._application.getGlobalContainerStack()
-        if not global_container_stack:
+        used_extruder_stacks = self._application.getExtruderManager().getUsedExtruderStacks()
+        if not global_container_stack or not used_extruder_stacks:
             return
 
         # check if linear advance settings are already applied
         start_gcode = global_container_stack.getProperty("machine_start_gcode", "value")
         if "M900 " in start_gcode:
+            Logger.log("d", "Start GCode already includes a linear advance snippet")
             return
 
         # get setting from Cura
-        linear_advance_factor = global_container_stack.getProperty(self._setting_key, "value")
-        if linear_advance_factor == 0:
+        some_factors_set = False
+        for extruder_stack in used_extruder_stacks:
+            linear_advance_factor = extruder_stack.getProperty(self._setting_key, "value")
+            if linear_advance_factor != 0:
+                some_factors_set = True
+        if not some_factors_set:
+            Logger.log("d", "No used extruders specify a linear advance factor")
             return
 
         gcode_dict = getattr(scene, "gcode_dict", {})
         if not gcode_dict: # this also checks for an empty dict
             Logger.log("w", "Scene has no gcode to process")
             return
+
+        dict_changed = False
 
         for plate_id in gcode_dict:
             gcode_list = gcode_dict[plate_id]
@@ -84,7 +96,11 @@ class LinearAdvanceSettingPlugin(Extension):
                 continue
 
             if ";LINEARADVANCEPROCESSED\n" not in gcode_list[0]:
-                gcode_list[1] = ("M900 K%d ;added by LinearAdvanceSettingPlugin\n" % linear_advance_factor) + gcode_list[1]
+                for extruder_stack in used_extruder_stacks:
+                    linear_advance_factor = extruder_stack.getProperty(self._setting_key, "value")
+                    if linear_advance_factor != 0:
+                        extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
+                        gcode_list[1] = ("M900 K%f T%d ;added by LinearAdvanceSettingPlugin\n" % (linear_advance_factor, extruder_nr)) + gcode_list[1]
                 gcode_list[0] += ";LINEARADVANCEPROCESSED\n"
                 gcode_dict[plate_id] = gcode_list
                 dict_changed = True
