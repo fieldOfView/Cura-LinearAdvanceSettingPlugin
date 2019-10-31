@@ -69,18 +69,6 @@ class LinearAdvanceSettingPlugin(Extension):
             container._definition_cache[child.key] = child
             self._updateAddedChildren(container, child)
 
-    def _getFirstSubstringBetween(self, input_data: str, start: str, end: str = None) -> str:
-        start_index = input_data.find(start)
-        if start_index == -1:
-            return None
-        start_index += len(start)
-        if not end:
-            return input_data[start_index:]
-        end_index = input_data.find(end, start_index)
-        if end_index == -1:
-            return input_data[start_index:]
-        return input_data[start_index:end_index]
-
     def _filterGcode(self, output_device):
         scene = self._application.getController().getScene()
 
@@ -92,7 +80,7 @@ class LinearAdvanceSettingPlugin(Extension):
         # get setting from Cura
         some_factors_set = False
         for extruder_stack in used_extruder_stacks:
-            for setting_key in self.__gcode_type_to_setting_dict.values():
+            for setting_key in self.__gcode_type_to_setting_key.values():
                 linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
                 if linear_advance_factor != 0:
                     some_factors_set = True
@@ -116,37 +104,44 @@ class LinearAdvanceSettingPlugin(Extension):
                 Logger.log("w", "Plate %s does not contain any layers", plate_id)
                 continue
 
-            if ";LINEARADVANCEPROCESSED\n" not in gcode_list[0]:
-                for layer_nr, layer in enumerate(gcode_list):
-                    lines = layer.split("\n")
-                    lines_changed = False
-                    for line_nr, line in enumerate(lines):
-                        if line.startswith(";TYPE:"):
-                            # Changed line type
-                            line_type = self._getFirstSubstringBetween(line, ":")
-                            setting_key = self.__gcode_type_to_setting_dict[line_type]
-
-                            for extruder_stack in used_extruder_stacks:
-                                linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
-
-                                extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
-                                lines.insert(line_nr + 1, "M900 K%f T%d ;added by LinearAdvanceSettingPlugin" % (linear_advance_factor, extruder_nr))
-                                lines_changed = True
-
-                    if lines_changed:
-                        gcode_list[layer_nr] = "\n".join(lines)
-                        dict_changed = True
-
-                gcode_list[0] += ";LINEARADVANCEPROCESSED\n"
-                gcode_dict[plate_id] = gcode_list
-            else:
+            if ";LINEARADVANCEPROCESSED\n" in gcode_list[0]:
                 Logger.log("d", "Plate %s has already been processed", plate_id)
                 continue
+
+            for layer_nr, layer in enumerate(gcode_list):
+                lines = layer.split("\n")
+                lines_changed = False
+                for line_nr, line in enumerate(lines):
+                    if line.startswith(";TYPE:"):
+                        # Changed line type
+                        feature_type = line[6:] # remove ";TYPE:"
+                        try:
+                            setting_key = self.__gcode_type_to_setting_key[feature_type]
+                        except KeyError:
+                            Logger.log("w", "Unknown feature type in gcode: ", feature_type)
+                            setting_key = ""
+
+                        for extruder_stack in used_extruder_stacks:
+                            if setting_key:
+                                linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
+                            else:
+                                linear_advance_factor = 0 # no linear advance compensation for this feature
+
+                            extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
+                            lines.insert(line_nr + 1, "M900 K%f T%d ;added by LinearAdvanceSettingPlugin" % (linear_advance_factor, extruder_nr))
+                            lines_changed = True
+
+                if lines_changed:
+                    gcode_list[layer_nr] = "\n".join(lines)
+                    dict_changed = True
+
+            gcode_list[0] += ";LINEARADVANCEPROCESSED\n"
+            gcode_dict[plate_id] = gcode_list
 
         if dict_changed:
             setattr(scene, "gcode_dict", gcode_dict)
 
-    __gcode_type_to_setting_dict = {
+    __gcode_type_to_setting_key = {
         "WALL-OUTER": "material_linear_advance_factor_wall_0",
         "WALL-INNER": "material_linear_advance_factor_wall_x",
         "SKIN": "material_linear_advance_factor_topbottom",
