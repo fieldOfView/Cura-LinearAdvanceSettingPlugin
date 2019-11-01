@@ -21,9 +21,10 @@ class LinearAdvanceSettingPlugin(Extension):
 
         self._application = Application.getInstance()
 
-        self._i18n_catalog = None
+        self._i18n_catalog = None  # type: Optional[i18nCatalog]
 
-        self._settings_dict = {}
+        self._settings_dict = {}  # type: Dict[str, Any]
+        self._expanded_categories = []  # type: List[str]  temporary list used while creating nested settings
 
         settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance.def.json")
         try:
@@ -61,11 +62,23 @@ class LinearAdvanceSettingPlugin(Extension):
         # which breaks stuff
         material_category._children.append(setting_definition)
         container._definition_cache[setting_key] = setting_definition
-        self._updateAddedChildren(container, setting_definition)
         container._updateRelations(setting_definition)
 
+        self._expanded_categories = self._application.expandedCategories.copy()
+        self._updateAddedChildren(container, setting_definition)
+        self._application.setExpandedCategories(self._expanded_categories)
+        self._expanded_categories = []
+
     def _updateAddedChildren(self, container: DefinitionContainer, setting_definition: SettingDefinition):
-        for child in setting_definition.children:
+        children = setting_definition.children
+        if not children:
+            return
+
+        # make sure this setting is expanded so its children show up  in setting views
+        if setting_definition.parent.key in self._expanded_categories:
+            self._expanded_categories.append(setting_definition.key)
+
+        for child in children:
             container._definition_cache[child.key] = child
             self._updateAddedChildren(container, child)
 
@@ -77,7 +90,7 @@ class LinearAdvanceSettingPlugin(Extension):
         if not global_container_stack or not used_extruder_stacks:
             return
 
-        # get setting from Cura
+        # check if any LA factor is specified at all
         some_factors_set = False
         for extruder_stack in used_extruder_stacks:
             for setting_key in self.__gcode_type_to_setting_key.values():
@@ -124,7 +137,7 @@ class LinearAdvanceSettingPlugin(Extension):
                         for extruder_stack in used_extruder_stacks:
                             if setting_key:
                                 linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
-                            else:
+                            else: # unknown feature type
                                 linear_advance_factor = 0 # no linear advance compensation for this feature
 
                             extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
