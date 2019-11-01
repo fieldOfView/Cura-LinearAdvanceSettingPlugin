@@ -16,7 +16,7 @@ import json
 import os.path
 
 class LinearAdvanceSettingPlugin(Extension):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self._application = Application.getInstance()
@@ -37,7 +37,7 @@ class LinearAdvanceSettingPlugin(Extension):
         ContainerRegistry.getInstance().containerLoadComplete.connect(self._onContainerLoadComplete)
         self._application.getOutputDeviceManager().writeStarted.connect(self._filterGcode)
 
-    def _onContainerLoadComplete(self, container_id):
+    def _onContainerLoadComplete(self, container_id: str) -> None:
         container = ContainerRegistry.getInstance().findContainers(id = container_id)[0]
         if not isinstance(container, DefinitionContainer):
             # skip containers that are not definitions
@@ -69,7 +69,7 @@ class LinearAdvanceSettingPlugin(Extension):
         self._application.setExpandedCategories(self._expanded_categories)
         self._expanded_categories = []
 
-    def _updateAddedChildren(self, container: DefinitionContainer, setting_definition: SettingDefinition):
+    def _updateAddedChildren(self, container: DefinitionContainer, setting_definition: SettingDefinition) -> None:
         children = setting_definition.children
         if not children:
             return
@@ -82,7 +82,7 @@ class LinearAdvanceSettingPlugin(Extension):
             container._definition_cache[child.key] = child
             self._updateAddedChildren(container, child)
 
-    def _filterGcode(self, output_device):
+    def _filterGcode(self, output_device: "OutputDevice") -> None:
         scene = self._application.getController().getScene()
 
         global_container_stack = self._application.getGlobalContainerStack()
