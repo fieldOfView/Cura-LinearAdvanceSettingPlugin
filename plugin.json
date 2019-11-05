@@ -1,7 +1,7 @@
 {
     "name": "Linear Advance Setting",
     "author": "fieldOfView",
-    "version": "master",
+    "version": "3.5.7",
     "description": "Adds Linear Advance factor settings",
     "api": 5,
     "supported_sdk_versions": ["5.0.0", "6.0.0", "7.0.0"]
