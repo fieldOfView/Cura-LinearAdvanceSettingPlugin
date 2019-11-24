@@ -1,10 +1,6 @@
 # LinearAdvanceSettingPlugin
 
-This plugin adds a setting named "Linear Advance Factor" to the Material category in the Custom print setup of Cura.
+This plugin adds a setting named "Linear Advance Factor", and a number of feature-specific subsettings to the Material category in the Custom print setup of Cura. The plugin inserts M900 commands in the gcode to set the Linear Advance Factor for Marlin-based printers that have the LIN_ADVANCE feature enabled.
 
-If the start gcode doesn't include an M900 statement to set the linear advance parameters, a single G-code line is added before the start G-code:
-```
-...
-M900 K{material_linear_advance_factor}
-...
-```
+For more information about Linear Advance, see the Marlin documentation: http://marlinfw.org/docs/features/lin_advance.html
+
