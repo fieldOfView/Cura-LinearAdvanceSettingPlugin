@@ -67,7 +67,7 @@ class LinearAdvanceSettingPlugin(Extension):
         self._expanded_categories = self._application.expandedCategories.copy()
         self._updateAddedChildren(container, setting_definition)
         self._application.setExpandedCategories(self._expanded_categories)
-        self._expanded_categories = []
+        self._expanded_categories = []  # type: List[str]
 
     def _updateAddedChildren(self, container: DefinitionContainer, setting_definition: SettingDefinition) -> None:
         children = setting_definition.children
@@ -121,32 +121,56 @@ class LinearAdvanceSettingPlugin(Extension):
                 Logger.log("d", "Plate %s has already been processed", plate_id)
                 continue
 
-            for layer_nr, layer in enumerate(gcode_list):
-                lines = layer.split("\n")
-                lines_changed = False
-                for line_nr, line in enumerate(lines):
-                    if line.startswith(";TYPE:"):
-                        # Changed line type
-                        feature_type = line[6:] # remove ";TYPE:"
-                        try:
-                            setting_key = self.__gcode_type_to_setting_key[feature_type]
-                        except KeyError:
-                            Logger.log("w", "Unknown feature type in gcode: ", feature_type)
-                            setting_key = ""
+            current_linear_advance_factors = {}  # type: Dict[int, float]
+            apply_factor_per_feature = {}  # type: Dict[int, bool]
 
-                        for extruder_stack in used_extruder_stacks:
-                            if setting_key:
-                                linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
-                            else: # unknown feature type
-                                linear_advance_factor = 0 # no linear advance compensation for this feature
+            for extruder_stack in used_extruder_stacks:
+                linear_advance_factor = extruder_stack.getProperty(self._setting_key, "value")
 
-                            extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
-                            lines.insert(line_nr + 1, "M900 K%f T%d ;added by LinearAdvanceSettingPlugin" % (linear_advance_factor, extruder_nr))
-                            lines_changed = True
+                extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
+                gcode_list[1] = ("M900 K%f T%d ;added by LinearAdvanceSettingPlugin\n" % (linear_advance_factor, extruder_nr)) + gcode_list[1]
+                dict_changed = True
 
-                if lines_changed:
-                    gcode_list[layer_nr] = "\n".join(lines)
-                    dict_changed = True
+                current_linear_advance_factors[extruder_nr] = linear_advance_factor
+
+                for feature_setting_key in self.__gcode_type_to_setting_key.values():
+                    if extruder_stack.getProperty(feature_setting_key, "value") != linear_advance_factor:
+                        apply_factor_per_feature[extruder_nr] = True
+                        break
+
+            if any(apply_factor_per_feature.values()):
+                for layer_nr, layer in enumerate(gcode_list):
+                    lines = layer.split("\n")
+                    lines_changed = False
+                    for line_nr, line in enumerate(lines):
+                        if line.startswith(";TYPE:"):
+                            # Changed line type
+                            feature_type = line[6:] # remove ";TYPE:"
+                            try:
+                                setting_key = self.__gcode_type_to_setting_key[feature_type]
+                            except KeyError:
+                                Logger.log("w", "Unknown feature type in gcode: ", feature_type)
+                                setting_key = ""
+
+                            for extruder_stack in used_extruder_stacks:
+                                extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
+                                if not apply_factor_per_feature[extruder_nr]:
+                                    continue
+
+                                if setting_key:
+                                    linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
+                                else: # unknown feature type
+                                    linear_advance_factor = 0 # no linear advance compensation for this feature
+
+                                if linear_advance_factor != current_linear_advance_factors.get(extruder_nr, None):
+                                    current_linear_advance_factors[extruder_nr] = linear_advance_factor
+
+                                    lines.insert(line_nr + 1, "M900 K%f T%d ;added by LinearAdvanceSettingPlugin" % (linear_advance_factor, extruder_nr))
+                                    lines_changed = True
+
+                    if lines_changed:
+                        gcode_list[layer_nr] = "\n".join(lines)
+                        dict_changed = True
 
             gcode_list[0] += ";LINEARADVANCEPROCESSED\n"
             gcode_dict[plate_id] = gcode_list
