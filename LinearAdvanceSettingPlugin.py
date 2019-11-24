@@ -130,7 +130,7 @@ class LinearAdvanceSettingPlugin(Extension):
                 linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
 
                 extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
-                gcode_list[1] = ("M900 K%f T%d ;added by LinearAdvanceSettingPlugin\n" % (linear_advance_factor, extruder_nr)) + gcode_list[1]
+                gcode_list[1] = gcode_list[1] + ("M900 K%f T%d ;added by LinearAdvanceSettingPlugin" % (linear_advance_factor, extruder_nr)) + "\n"
                 dict_changed = True
 
                 current_linear_advance_factors[extruder_nr] = linear_advance_factor
