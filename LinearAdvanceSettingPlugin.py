@@ -62,12 +62,12 @@ class LinearAdvanceSettingPlugin(Extension):
         # which breaks stuff
         material_category._children.append(setting_definition)
         container._definition_cache[setting_key] = setting_definition
-        container._updateRelations(setting_definition)
 
         self._expanded_categories = self._application.expandedCategories.copy()
         self._updateAddedChildren(container, setting_definition)
         self._application.setExpandedCategories(self._expanded_categories)
         self._expanded_categories = []  # type: List[str]
+        container._updateRelations(setting_definition)
 
     def _updateAddedChildren(self, container: DefinitionContainer, setting_definition: SettingDefinition) -> None:
         children = setting_definition.children
