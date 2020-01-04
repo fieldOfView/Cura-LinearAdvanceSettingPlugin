@@ -109,6 +109,15 @@ class LinearAdvanceSettingPlugin(Extension):
             Logger.log("w", "Scene has no gcode to process")
             return
 
+        gcode_flavor = global_stack.getProperty("machine_gcode_flavor", "value")
+        if gcode_flavor == "RepRap (RepRap)":
+            # Pressure Advance (for RepRap / Duet)
+            gcode_command_pattern = "M572 S%f D%d"
+        else:
+            # Linear Advance (for Marlin)
+            gcode_command_pattern = "M900 K%f T%d"
+        gcode_command_pattern += " ;added by LinearAdvanceSettingPlugin"
+
         dict_changed = False
 
         for plate_id in gcode_dict:
@@ -130,7 +139,7 @@ class LinearAdvanceSettingPlugin(Extension):
                 linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
 
                 extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
-                gcode_list[1] = gcode_list[1] + ("M900 K%f T%d ;added by LinearAdvanceSettingPlugin" % (linear_advance_factor, extruder_nr)) + "\n"
+                gcode_list[1] = gcode_list[1] + gcode_command_pattern % (linear_advance_factor, extruder_nr) + "\n"
                 dict_changed = True
 
                 current_linear_advance_factors[extruder_nr] = linear_advance_factor
@@ -167,7 +176,7 @@ class LinearAdvanceSettingPlugin(Extension):
                                 if linear_advance_factor != current_linear_advance_factors.get(extruder_nr, None):
                                     current_linear_advance_factors[extruder_nr] = linear_advance_factor
 
-                                    lines.insert(line_nr + 1, "M900 K%f T%d ;added by LinearAdvanceSettingPlugin" % (linear_advance_factor, extruder_nr))
+                                    lines.insert(line_nr + 1, gcode_command_pattern % (linear_advance_factor, extruder_nr))
                                     lines_changed = True
 
                     if lines_changed:
