@@ -82,6 +82,18 @@ class LinearAdvanceSettingPlugin(Extension):
             container._definition_cache[child.key] = child
             self._updateAddedChildren(container, child)
 
+    def _linearAdvanceGcode(self, linear_advance_factor: float, extruder_nr: int) -> str:
+        global_stack = self._application.getMachineManager().activeMachine
+        gcode_flavor = global_stack.getProperty("machine_gcode_flavor", "value")
+        gcode = ""
+        if gcode_flavor == "RepRap (RepRap)":
+            gcode = "M572 S%f D%d" % (linear_advance_factor, extruder_nr)
+        else:
+            gcode = "M900 K%f T%d" % (linear_advance_factor, extruder_nr)
+
+        gcode += " ;added by LinearAdvanceSettingPlugin"
+        return gcode
+
     def _filterGcode(self, output_device: "OutputDevice") -> None:
         scene = self._application.getController().getScene()
 
@@ -130,7 +142,7 @@ class LinearAdvanceSettingPlugin(Extension):
                 linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
 
                 extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
-                gcode_list[1] = gcode_list[1] + ("M900 K%f T%d ;added by LinearAdvanceSettingPlugin" % (linear_advance_factor, extruder_nr)) + "\n"
+                gcode_list[1] = gcode_list[1] + self._linearAdvanceGcode(linear_advance_factor, extruder_nr) + "\n"
                 dict_changed = True
 
                 current_linear_advance_factors[extruder_nr] = linear_advance_factor
@@ -167,7 +179,7 @@ class LinearAdvanceSettingPlugin(Extension):
                                 if linear_advance_factor != current_linear_advance_factors.get(extruder_nr, None):
                                     current_linear_advance_factors[extruder_nr] = linear_advance_factor
 
-                                    lines.insert(line_nr + 1, "M900 K%f T%d ;added by LinearAdvanceSettingPlugin" % (linear_advance_factor, extruder_nr))
+                                    lines.insert(line_nr + 1, self._linearAdvanceGcode(linear_advance_factor, extruder_nr))
                                     lines_changed = True
 
                     if lines_changed:
