@@ -2,7 +2,7 @@
 # The LinearAdvanceSettingPlugin is released under the terms of the AGPLv3 or higher.
 
 from UM.Extension import Extension
-from UM.Application import Application
+from cura.CuraApplication import CuraApplication
 from UM.Logger import Logger
 from UM.Settings.SettingDefinition import SettingDefinition
 from UM.Settings.DefinitionContainer import DefinitionContainer
@@ -15,16 +15,21 @@ import collections
 import json
 import os.path
 
+from typing import List, Optional, Any, Dict, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from UM.OutputDevice.OutputDevice import OutputDevice
+
 class LinearAdvanceSettingPlugin(Extension):
     def __init__(self) -> None:
         super().__init__()
 
-        self._application = Application.getInstance()
+        self._application = CuraApplication.getInstance()
 
         self._i18n_catalog = None  # type: Optional[i18nCatalog]
 
         self._settings_dict = {}  # type: Dict[str, Any]
-        self._expanded_categories = []  # type: List[str]  temporary list used while creating nested settings
+        self._expanded_categories = []  # type: List[str]  # temporary list used while creating nested settings
 
         settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance.def.json")
         try:
@@ -71,7 +76,7 @@ class LinearAdvanceSettingPlugin(Extension):
 
     def _updateAddedChildren(self, container: DefinitionContainer, setting_definition: SettingDefinition) -> None:
         children = setting_definition.children
-        if not children:
+        if not children or not setting_definition.parent:
             return
 
         # make sure this setting is expanded so its children show up  in setting views
@@ -109,7 +114,7 @@ class LinearAdvanceSettingPlugin(Extension):
             Logger.log("w", "Scene has no gcode to process")
             return
 
-        gcode_flavor = global_stack.getProperty("machine_gcode_flavor", "value")
+        gcode_flavor = global_container_stack.getProperty("machine_gcode_flavor", "value")
         if gcode_flavor == "RepRap (RepRap)":
             # Pressure Advance (for RepRap / Duet)
             gcode_command_pattern = "M572 S%f D%d"
