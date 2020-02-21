@@ -95,20 +95,6 @@ class LinearAdvanceSettingPlugin(Extension):
         if not global_container_stack or not used_extruder_stacks:
             return
 
-        # check if any LA factor is specified at all
-        some_factors_set = False
-        for extruder_stack in used_extruder_stacks:
-            for feature_setting_key in self.__gcode_type_to_setting_key.values():
-                linear_advance_factor = extruder_stack.getProperty(feature_setting_key, "value")
-                if linear_advance_factor != 0:
-                    some_factors_set = True
-                    break
-            if some_factors_set:
-                break
-        if not some_factors_set:
-            Logger.log("d", "No used extruders specify a linear advance factor")
-            return
-
         gcode_dict = getattr(scene, "gcode_dict", {})
         if not gcode_dict: # this also checks for an empty dict
             Logger.log("w", "Scene has no gcode to process")
