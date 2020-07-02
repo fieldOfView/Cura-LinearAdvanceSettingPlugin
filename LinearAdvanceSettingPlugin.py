@@ -14,6 +14,7 @@ i18n_catalog = i18nCatalog("LinearAdvanceSettingPlugin")
 import collections
 import json
 import os.path
+import re
 
 from typing import List, Optional, Any, Dict, TYPE_CHECKING
 
@@ -66,22 +67,21 @@ class LinearAdvanceSettingPlugin(Extension):
             Logger.log("e", "Could not find parent category setting to add settings to")
             return
 
-        setting_key = list(self._settings_dict.keys())[0]
+        for setting_key in self._settings_dict.keys():
+            setting_definition = SettingDefinition(setting_key, container, material_category, self._i18n_catalog)
+            setting_definition.deserialize(self._settings_dict[setting_key])
 
-        setting_definition = SettingDefinition(setting_key, container, material_category, self._i18n_catalog)
-        setting_definition.deserialize(self._settings_dict[setting_key])
+            # add the setting to the already existing material settingdefinition
+            # private member access is naughty, but the alternative is to serialise, nix and deserialise the whole thing,
+            # which breaks stuff
+            material_category._children.append(setting_definition)
+            container._definition_cache[setting_key] = setting_definition
 
-        # add the setting to the already existing material settingdefinition
-        # private member access is naughty, but the alternative is to serialise, nix and deserialise the whole thing,
-        # which breaks stuff
-        material_category._children.append(setting_definition)
-        container._definition_cache[setting_key] = setting_definition
-
-        self._expanded_categories = self._application.expandedCategories.copy()
-        self._updateAddedChildren(container, setting_definition)
-        self._application.setExpandedCategories(self._expanded_categories)
-        self._expanded_categories = []  # type: List[str]
-        container._updateRelations(setting_definition)
+            self._expanded_categories = self._application.expandedCategories.copy()
+            self._updateAddedChildren(container, setting_definition)
+            self._application.setExpandedCategories(self._expanded_categories)
+            self._expanded_categories = []  # type: List[str]
+            container._updateRelations(setting_definition)
 
     def _updateAddedChildren(self, container: DefinitionContainer, setting_definition: SettingDefinition) -> None:
         children = setting_definition.children
@@ -109,16 +109,21 @@ class LinearAdvanceSettingPlugin(Extension):
             Logger.log("w", "Scene has no gcode to process")
             return
 
-        gcode_flavor = global_container_stack.getProperty("machine_gcode_flavor", "value")
-        if gcode_flavor == "RepRap (RepRap)":
-            # Pressure Advance (for RepRap / Duet)
-            gcode_command_pattern = "M572 S%f D%d"
-        else:
+        flavor = global_container_stack.getProperty("material_linear_advance_flavor", "value")
+        if flavor == "marlin":
             # Linear Advance (for Marlin)
             gcode_command_pattern = "M900 K%f T%d"
+        elif flavor == "reprap":
+            # Pressure Advance (for RepRap / Duet)
+            gcode_command_pattern = "M572 S%f D%d"
+        elif flavor == "klipper":
+            # Pressure Advance (for Klipper)
+            gcode_command_pattern = "SET_PRESSURE_ADVANCE ADVANCE=%f"
         gcode_command_pattern += " ;added by LinearAdvanceSettingPlugin"
 
         dict_changed = False
+
+        toolchange_regex = re.compile("^T(\d+)")
 
         for plate_id in gcode_dict:
             gcode_list = gcode_dict[plate_id]
@@ -130,16 +135,27 @@ class LinearAdvanceSettingPlugin(Extension):
                 Logger.log("d", "Plate %s has already been processed", plate_id)
                 continue
 
-            setting_key = list(self._settings_dict.keys())[0]
+            setting_key = material_linear_advance_factor
 
             current_linear_advance_factors = {}  # type: Dict[int, float]
             apply_factor_per_feature = {}  # type: Dict[int, bool]
 
+            try:
+                current_extruder_nr = self._application.getExtruderManager().getInitialExtruderNr()
+            except AttributeError:
+                current_extruder_nr = used_extruder_stacks[0].getProperty("extruder_nr", "value")
+
             for extruder_stack in used_extruder_stacks:
+                extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
+                if flavor == "klipper" and extruder_nr != current_extruder_nr:
+                    continue
                 linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
 
-                extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
-                gcode_list[1] = gcode_list[1] + gcode_command_pattern % (linear_advance_factor, extruder_nr) + "\n"
+                if flavor != "klipper":
+                    gcode_list[1] = gcode_list[1] + gcode_command_pattern % (linear_advance_factor, extruder_nr) + "\n"
+                else:
+                    gcode_list[1] = gcode_list[1] + (gcode_command_pattern % linear_advance_factor) + "\n"
+
                 dict_changed = True
 
                 current_linear_advance_factors[extruder_nr] = linear_advance_factor
@@ -150,14 +166,17 @@ class LinearAdvanceSettingPlugin(Extension):
                         break
 
             if any(apply_factor_per_feature.values()):
-                current_layer_number = -1
+                current_layer_nr = -1
                 for layer_nr, layer in enumerate(gcode_list):
                     lines = layer.split("\n")
                     lines_changed = False
                     for line_nr, line in enumerate(lines):
+                        toolchange_match = toolchange_regex.match(line)
+                        if toolchange_match:
+                            current_extruder_nr = toolchange_match.group(1)
                         if line.startswith(";LAYER:"):
                             try:
-                                current_layer_number = int(line[7:])
+                                current_layer_nr = int(line[7:])
                             except ValueError:
                                 Logger.log("w", "Could not parse layer number: ", line)
                         if line.startswith(";TYPE:"):
@@ -169,11 +188,14 @@ class LinearAdvanceSettingPlugin(Extension):
                                 Logger.log("w", "Unknown feature type in gcode: ", feature_type)
                                 feature_setting_key = ""
 
-                            if current_layer_number <= 0 and feature_type != "SKIRT":
+                            if current_layer_nr <= 0 and feature_type != "SKIRT":
                                 feature_setting_key = "material_linear_advance_factor_layer_0"
 
                             for extruder_stack in used_extruder_stacks:
                                 extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
+                                if flavor == "klipper" and extruder_nr != current_extruder_nr:
+                                    continue
+
                                 if not apply_factor_per_feature[extruder_nr]:
                                     continue
 
@@ -185,7 +207,11 @@ class LinearAdvanceSettingPlugin(Extension):
                                 if linear_advance_factor != current_linear_advance_factors.get(extruder_nr, None):
                                     current_linear_advance_factors[extruder_nr] = linear_advance_factor
 
-                                    lines.insert(line_nr + 1, gcode_command_pattern % (linear_advance_factor, extruder_nr))
+                                    if flavor != "klipper":
+                                        lines.insert(line_nr + 1, gcode_command_pattern % (linear_advance_factor, extruder_nr))
+                                    else:
+                                        lines.insert(line_nr + 1, gcode_command_pattern % linear_advance_factor)
+
                                     lines_changed = True
 
                     if lines_changed:
