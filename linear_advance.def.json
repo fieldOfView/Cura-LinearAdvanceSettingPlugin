@@ -5,9 +5,9 @@
         "type": "enum",
         "options":
         {
-            "marlin": "Linear (Marlin)",
-            "reprap": "Pressure (Reprap)",
-            "klipper": "Pressure (Klipper)"
+            "marlin": "Marlin: Linear Advance",
+            "reprap": "Reprap: Pressure Advance",
+            "klipper": "Klipper: Pressure Advance"
         },
         "default_value": "marlin",
         "value": "'reprap' if machine_gcode_flavor == 'RepRap (RepRap)' else 'marlin'",
