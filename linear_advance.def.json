@@ -131,6 +131,18 @@
                 "value": "material_linear_advance_factor",
                 "enabled": "resolveOrValue('adhesion_type') == 'skirt' or resolveOrValue('adhesion_type') == 'brim' or resolveOrValue('draft_shield_enabled') or resolveOrValue('ooze_shield_enabled')",
                 "limit_to_extruder": "adhesion_extruder_nr"
+            },
+            "material_linear_advance_factor_layer_0": {
+                "label": "Initial Layer Linear Advance Factor",
+                "description": "The Linear Advance Factor used when printing the first layer. A value of '0' means no linear advance compensation is applied for this feature.",
+                "type": "float",
+                "default_value": 0,
+                "minimum_value": "0",
+                "maximum_value_warning": "10.0",
+                "settable_per_mesh": false,
+                "settable_per_extruder": true,
+                "settable_per_meshgroup": false,
+                "value": "material_linear_advance_factor"
             }
         }
     }

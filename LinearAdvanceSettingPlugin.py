@@ -150,10 +150,16 @@ class LinearAdvanceSettingPlugin(Extension):
                         break
 
             if any(apply_factor_per_feature.values()):
+                current_layer_number = -1
                 for layer_nr, layer in enumerate(gcode_list):
                     lines = layer.split("\n")
                     lines_changed = False
                     for line_nr, line in enumerate(lines):
+                        if line.startswith(";LAYER:"):
+                            try:
+                                current_layer_number = int(line[7:])
+                            except ValueError:
+                                Logger.log("w", "Could not parse layer number: ", line)
                         if line.startswith(";TYPE:"):
                             # Changed line type
                             feature_type = line[6:] # remove ";TYPE:"
@@ -162,6 +168,9 @@ class LinearAdvanceSettingPlugin(Extension):
                             except KeyError:
                                 Logger.log("w", "Unknown feature type in gcode: ", feature_type)
                                 feature_setting_key = ""
+
+                            if current_layer_number <= 0 and feature_type != "SKIRT":
+                                feature_setting_key = "material_linear_advance_factor_layer_0"
 
                             for extruder_stack in used_extruder_stacks:
                                 extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
