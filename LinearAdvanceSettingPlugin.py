@@ -135,7 +135,7 @@ class LinearAdvanceSettingPlugin(Extension):
                 Logger.log("d", "Plate %s has already been processed", plate_id)
                 continue
 
-            setting_key = material_linear_advance_factor
+            setting_key = "material_linear_advance_factor"
 
             current_linear_advance_factors = {}  # type: Dict[int, float]
             apply_factor_per_feature = {}  # type: Dict[int, bool]
