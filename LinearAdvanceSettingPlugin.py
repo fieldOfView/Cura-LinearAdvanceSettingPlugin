@@ -173,7 +173,7 @@ class LinearAdvanceSettingPlugin(Extension):
                     for line_nr, line in enumerate(lines):
                         toolchange_match = toolchange_regex.match(line)
                         if toolchange_match:
-                            current_extruder_nr = toolchange_match.group(1)
+                            current_extruder_nr = int(toolchange_match.group(1))
                         if line.startswith(";LAYER:"):
                             try:
                                 current_layer_nr = int(line[7:])
