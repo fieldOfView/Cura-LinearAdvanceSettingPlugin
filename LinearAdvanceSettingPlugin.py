@@ -141,12 +141,12 @@ class LinearAdvanceSettingPlugin(Extension):
             apply_factor_per_feature = {}  # type: Dict[int, bool]
 
             try:
-                current_extruder_nr = self._application.getExtruderManager().getInitialExtruderNr()
+                current_extruder_nr = int(self._application.getExtruderManager().getInitialExtruderNr())
             except AttributeError:
-                current_extruder_nr = used_extruder_stacks[0].getProperty("extruder_nr", "value")
+                current_extruder_nr = int(used_extruder_stacks[0].getProperty("extruder_nr", "value"))
 
             for extruder_stack in used_extruder_stacks:
-                extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
+                extruder_nr = int(extruder_stack.getProperty("extruder_nr", "value"))
                 if flavor == "klipper" and extruder_nr != current_extruder_nr:
                     continue
                 linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
