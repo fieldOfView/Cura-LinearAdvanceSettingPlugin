@@ -3,7 +3,9 @@
 
 from UM.Extension import Extension
 from cura.CuraApplication import CuraApplication
+from cura.ApplicationMetadata import CuraSDKVersion
 from UM.Logger import Logger
+from UM.Version import Version
 from UM.Settings.SettingDefinition import SettingDefinition
 from UM.Settings.DefinitionContainer import DefinitionContainer
 from UM.Settings.ContainerRegistry import ContainerRegistry
@@ -31,7 +33,10 @@ class LinearAdvanceSettingPlugin(Extension):
         self._settings_dict = {}  # type: Dict[str, Any]
         self._expanded_categories = []  # type: List[str]  # temporary list used while creating nested settings
 
-        settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance.def.json")
+        if Version(CuraSDKVersion) < Version("7.3.0"):
+            settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance35.def.json")
+        else:
+            settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance47.def.json")
         try:
             with open(settings_definition_path, "r", encoding = "utf-8") as f:
                 self._settings_dict = json.load(f, object_pairs_hook = collections.OrderedDict)
@@ -138,7 +143,7 @@ class LinearAdvanceSettingPlugin(Extension):
                 extruder_nr = int(extruder_stack.getProperty("extruder_nr", "value"))
                 linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
 
-                gcode_list[1] = gcode_list[1] + (gcode_command_pattern % linear_advance_factor) + "\n"
+                gcode_list[1] = gcode_list[1] + gcode_command_pattern % (linear_advance_factor, extruder_nr) + "\n"
 
                 dict_changed = True
 
