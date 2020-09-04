@@ -1,20 +1,4 @@
 {
-    "material_linear_advance_flavor": {
-        "label": "Advance Flavor",
-        "description": "The type of advance compensation to insert.",
-        "type": "enum",
-        "options":
-        {
-            "marlin": "Marlin: Linear Advance",
-            "reprap": "Reprap: Pressure Advance",
-            "klipper": "Klipper: Pressure Advance"
-        },
-        "default_value": "marlin",
-        "value": "'reprap' if machine_gcode_flavor == 'RepRap (RepRap)' else 'marlin'",
-        "settable_per_mesh": false,
-        "settable_per_extruder": false,
-        "settable_per_meshgroup": false
-    },
     "material_linear_advance_factor": {
         "label": "Linear Advance Factor",
         "description": "Sets the advance extrusion factor for Linear Advance. A value of '0' means no linear advance compensation is applied.",
