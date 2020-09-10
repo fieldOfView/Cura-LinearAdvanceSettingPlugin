@@ -3,7 +3,6 @@
 
 from UM.Extension import Extension
 from cura.CuraApplication import CuraApplication
-from cura.ApplicationMetadata import CuraSDKVersion
 from UM.Logger import Logger
 from UM.Version import Version
 from UM.Settings.SettingDefinition import SettingDefinition
@@ -33,7 +32,15 @@ class LinearAdvanceSettingPlugin(Extension):
         self._settings_dict = {}  # type: Dict[str, Any]
         self._expanded_categories = []  # type: List[str]  # temporary list used while creating nested settings
 
-        if Version(CuraSDKVersion) < Version("7.3.0"):
+        try:
+            api_version = self._application.getAPIVersion()
+        except AttributeError:
+            # UM.Application.getAPIVersion was added for API > 6 (Cura 4)
+            # Since this plugin version is only compatible with Cura 3.5 and newer, and no version-granularity
+            # is required before Cura 4.7, it is safe to assume API 5
+            api_version = Version(5)
+
+        if api_version < Version("7.3.0"):
             settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance35.def.json")
         else:
             settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance47.def.json")
