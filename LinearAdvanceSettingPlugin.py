@@ -156,6 +156,7 @@ class LinearAdvanceSettingPlugin(Extension):
 
                 current_linear_advance_factors[extruder_nr] = linear_advance_factor
 
+                apply_factor_per_feature[extruder_nr] = False
                 for feature_setting_key in self.__gcode_type_to_setting_key.values():
                     if extruder_stack.getProperty(feature_setting_key, "value") != linear_advance_factor:
                         apply_factor_per_feature[extruder_nr] = True
