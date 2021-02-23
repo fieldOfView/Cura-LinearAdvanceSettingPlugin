@@ -4,3 +4,11 @@ This plugin adds a setting named "Linear Advance Factor", and a number of featur
 
 For more information about Linear Advance, see the Marlin documentation: http://marlinfw.org/docs/features/lin_advance.html
 For more information about Pressure Advance, see the Duet documentation: https://duet3d.dozuki.com/Wiki/Pressure_advance
+
+Users of Klipper can add the following lines to their `printer.cfg`:
+```
+[gcode_macro m900]
+default_parameter_K: 0
+gcode:
+  SET_PRESSURE_ADVANCE ADVANCE={K}
+```

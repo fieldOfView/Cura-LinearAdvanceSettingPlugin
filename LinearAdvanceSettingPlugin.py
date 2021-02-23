@@ -1,9 +1,10 @@
-# Copyright (c) 2018 fieldOfView
+# Copyright (c) 2020 Aldo Hoeben / fieldOfView
 # The LinearAdvanceSettingPlugin is released under the terms of the AGPLv3 or higher.
 
 from UM.Extension import Extension
 from cura.CuraApplication import CuraApplication
 from UM.Logger import Logger
+from UM.Version import Version
 from UM.Settings.SettingDefinition import SettingDefinition
 from UM.Settings.DefinitionContainer import DefinitionContainer
 from UM.Settings.ContainerRegistry import ContainerRegistry
@@ -31,7 +32,18 @@ class LinearAdvanceSettingPlugin(Extension):
         self._settings_dict = {}  # type: Dict[str, Any]
         self._expanded_categories = []  # type: List[str]  # temporary list used while creating nested settings
 
-        settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance.def.json")
+        try:
+            api_version = self._application.getAPIVersion()
+        except AttributeError:
+            # UM.Application.getAPIVersion was added for API > 6 (Cura 4)
+            # Since this plugin version is only compatible with Cura 3.5 and newer, and no version-granularity
+            # is required before Cura 4.7, it is safe to assume API 5
+            api_version = Version(5)
+
+        if api_version < Version("7.3.0"):
+            settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance35.def.json")
+        else:
+            settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance47.def.json")
         try:
             with open(settings_definition_path, "r", encoding = "utf-8") as f:
                 self._settings_dict = json.load(f, object_pairs_hook = collections.OrderedDict)
@@ -66,22 +78,21 @@ class LinearAdvanceSettingPlugin(Extension):
             Logger.log("e", "Could not find parent category setting to add settings to")
             return
 
-        setting_key = list(self._settings_dict.keys())[0]
+        for setting_key in self._settings_dict.keys():
+            setting_definition = SettingDefinition(setting_key, container, material_category, self._i18n_catalog)
+            setting_definition.deserialize(self._settings_dict[setting_key])
 
-        setting_definition = SettingDefinition(setting_key, container, material_category, self._i18n_catalog)
-        setting_definition.deserialize(self._settings_dict[setting_key])
+            # add the setting to the already existing material settingdefinition
+            # private member access is naughty, but the alternative is to serialise, nix and deserialise the whole thing,
+            # which breaks stuff
+            material_category._children.append(setting_definition)
+            container._definition_cache[setting_key] = setting_definition
 
-        # add the setting to the already existing material settingdefinition
-        # private member access is naughty, but the alternative is to serialise, nix and deserialise the whole thing,
-        # which breaks stuff
-        material_category._children.append(setting_definition)
-        container._definition_cache[setting_key] = setting_definition
-
-        self._expanded_categories = self._application.expandedCategories.copy()
-        self._updateAddedChildren(container, setting_definition)
-        self._application.setExpandedCategories(self._expanded_categories)
-        self._expanded_categories = []  # type: List[str]
-        container._updateRelations(setting_definition)
+            self._expanded_categories = self._application.expandedCategories.copy()
+            self._updateAddedChildren(container, setting_definition)
+            self._application.setExpandedCategories(self._expanded_categories)
+            self._expanded_categories = []  # type: List[str]
+            container._updateRelations(setting_definition)
 
     def _updateAddedChildren(self, container: DefinitionContainer, setting_definition: SettingDefinition) -> None:
         children = setting_definition.children
@@ -130,16 +141,17 @@ class LinearAdvanceSettingPlugin(Extension):
                 Logger.log("d", "Plate %s has already been processed", plate_id)
                 continue
 
-            setting_key = list(self._settings_dict.keys())[0]
+            setting_key = "material_linear_advance_factor"
 
             current_linear_advance_factors = {}  # type: Dict[int, float]
             apply_factor_per_feature = {}  # type: Dict[int, bool]
 
             for extruder_stack in used_extruder_stacks:
+                extruder_nr = int(extruder_stack.getProperty("extruder_nr", "value"))
                 linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
 
-                extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
                 gcode_list[1] = gcode_list[1] + gcode_command_pattern % (linear_advance_factor, extruder_nr) + "\n"
+
                 dict_changed = True
 
                 current_linear_advance_factors[extruder_nr] = linear_advance_factor
@@ -150,10 +162,17 @@ class LinearAdvanceSettingPlugin(Extension):
                         break
 
             if any(apply_factor_per_feature.values()):
+                current_layer_nr = -1
                 for layer_nr, layer in enumerate(gcode_list):
                     lines = layer.split("\n")
                     lines_changed = False
                     for line_nr, line in enumerate(lines):
+
+                        if line.startswith(";LAYER:"):
+                            try:
+                                current_layer_nr = int(line[7:])
+                            except ValueError:
+                                Logger.log("w", "Could not parse layer number: ", line)
                         if line.startswith(";TYPE:"):
                             # Changed line type
                             feature_type = line[6:] # remove ";TYPE:"
@@ -163,8 +182,12 @@ class LinearAdvanceSettingPlugin(Extension):
                                 Logger.log("w", "Unknown feature type in gcode: ", feature_type)
                                 feature_setting_key = ""
 
+                            if current_layer_nr <= 0 and feature_type != "SKIRT":
+                                feature_setting_key = "material_linear_advance_factor_layer_0"
+
                             for extruder_stack in used_extruder_stacks:
                                 extruder_nr = extruder_stack.getProperty("extruder_nr", "value")
+
                                 if not apply_factor_per_feature[extruder_nr]:
                                     continue
 
@@ -177,6 +200,7 @@ class LinearAdvanceSettingPlugin(Extension):
                                     current_linear_advance_factors[extruder_nr] = linear_advance_factor
 
                                     lines.insert(line_nr + 1, gcode_command_pattern % (linear_advance_factor, extruder_nr))
+
                                     lines_changed = True
 
                     if lines_changed:
