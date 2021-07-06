@@ -115,6 +115,9 @@ class LinearAdvanceSettingPlugin(Extension):
         if not global_container_stack or not used_extruder_stacks:
             return
 
+        if not global_container_stack.getProperty("material_linear_advance_enable", "value"):
+            return
+
         gcode_dict = getattr(scene, "gcode_dict", {})
         if not gcode_dict: # this also checks for an empty dict
             Logger.log("w", "Scene has no gcode to process")

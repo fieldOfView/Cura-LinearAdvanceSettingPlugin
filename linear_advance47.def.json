@@ -1,4 +1,14 @@
 {
+    "material_linear_advance_enable":
+    {
+        "label": "Enable Linear Advance",
+        "description": "Enables adjusting the linear advance factors in the g-code.",
+        "type": "bool",
+        "default_value": false,
+        "settable_per_mesh": false,
+        "settable_per_extruder": false,
+        "settable_per_meshgroup": false
+    },
     "material_linear_advance_factor": {
         "label": "Linear Advance Factor",
         "description": "Sets the advance extrusion factor for Linear Advance. A value of '0' means no linear advance compensation is applied.",
@@ -9,6 +19,7 @@
         "settable_per_mesh": false,
         "settable_per_extruder": true,
         "settable_per_meshgroup": false,
+        "enabled": "resolveOrValue('material_linear_advance_enable')",
         "children": {
             "material_linear_advance_factor_infill": {
                 "label": "Infill Linear Advance Factor",
@@ -21,7 +32,7 @@
                 "settable_per_extruder": true,
                 "settable_per_meshgroup": false,
                 "value": "material_linear_advance_factor",
-                "enabled": "infill_sparse_density > 0",
+                "enabled": "resolveOrValue('material_linear_advance_enable') and infill_sparse_density > 0",
                 "limit_to_extruder": "infill_extruder_nr"
             },
             "material_linear_advance_factor_wall": {
@@ -35,6 +46,7 @@
                 "settable_per_extruder": true,
                 "settable_per_meshgroup": false,
                 "value": "material_linear_advance_factor",
+                "enabled": "resolveOrValue('material_linear_advance_enable')",
                 "children": {
                     "material_linear_advance_factor_wall_0": {
                         "label": "Outer Wall Linear Advance Factor",
@@ -47,6 +59,7 @@
                         "settable_per_extruder": true,
                         "settable_per_meshgroup": false,
                         "value": "material_linear_advance_factor_wall",
+                        "enabled": "resolveOrValue('material_linear_advance_enable')",
                         "limit_to_extruder": "wall_0_extruder_nr"
                     },
                     "material_linear_advance_factor_wall_x": {
@@ -60,6 +73,7 @@
                         "settable_per_extruder": true,
                         "settable_per_meshgroup": false,
                         "value": "material_linear_advance_factor_wall",
+                        "enabled": "resolveOrValue('material_linear_advance_enable')",
                         "limit_to_extruder": "wall_x_extruder_nr"
                     }
                 }
@@ -75,6 +89,7 @@
                 "settable_per_extruder": true,
                 "settable_per_meshgroup": false,
                 "value": "material_linear_advance_factor",
+                "enabled": "resolveOrValue('material_linear_advance_enable')",
                 "limit_to_extruder": "top_bottom_extruder_nr"
             },
             "material_linear_advance_factor_support": {
@@ -88,7 +103,7 @@
                 "settable_per_extruder": true,
                 "settable_per_meshgroup": false,
                 "value": "material_linear_advance_factor",
-                "enabled": "support_enable",
+                "enabled": "resolveOrValue('material_linear_advance_enable') and support_enable",
                 "limit_to_extruder": "support_extruder_nr"
             },
             "material_linear_advance_factor_support_interface": {
@@ -102,7 +117,7 @@
                 "settable_per_extruder": true,
                 "settable_per_meshgroup": false,
                 "value": "material_linear_advance_factor_support",
-                "enabled": "support_interface_enable and support_enable",
+                "enabled": "resolveOrValue('material_linear_advance_enable') and support_interface_enable and support_enable",
                 "limit_to_extruder": "support_interface_extruder_nr"
             },
             "material_linear_advance_factor_prime_tower": {
@@ -116,7 +131,7 @@
                 "settable_per_extruder": true,
                 "settable_per_meshgroup": false,
                 "value": "material_linear_advance_factor",
-                "enabled": "resolveOrValue('prime_tower_enable')"
+                "enabled": "resolveOrValue('material_linear_advance_enable') and resolveOrValue('prime_tower_enable')"
             },
             "material_linear_advance_factor_skirt_brim": {
                 "label": "Skirt/Brim Linear Advance Factor",
@@ -129,7 +144,7 @@
                 "settable_per_extruder": true,
                 "settable_per_meshgroup": false,
                 "value": "material_linear_advance_factor",
-                "enabled": "resolveOrValue('adhesion_type') == 'skirt' or resolveOrValue('adhesion_type') == 'brim' or resolveOrValue('draft_shield_enabled') or resolveOrValue('ooze_shield_enabled')",
+                "enabled": "resolveOrValue('material_linear_advance_enable') and (resolveOrValue('adhesion_type') == 'skirt' or resolveOrValue('adhesion_type') == 'brim' or resolveOrValue('draft_shield_enabled') or resolveOrValue('ooze_shield_enabled'))",
                 "limit_to_extruder": "adhesion_extruder_nr"
             },
             "material_linear_advance_factor_layer_0": {
@@ -142,7 +157,8 @@
                 "settable_per_mesh": false,
                 "settable_per_extruder": true,
                 "settable_per_meshgroup": false,
-                "value": "material_linear_advance_factor"
+                "value": "material_linear_advance_factor",
+                "enabled": "resolveOrValue('material_linear_advance_enable')"
             }
         }
     }
