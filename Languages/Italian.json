@@ -1,0 +1,37 @@
+{
+    "EnableLabelID": "Abilita Linear Advance",
+    "EnableDescriptionID": "Consente di regolare il fattore di Linear Advance nel g-code.",
+
+    "FactorLabelID": "Fattore di Linear Advance",
+    "FactorDescriptionID": "Imposta il fattore di estrusione avanzato per Linear Advance. Un valore pari a '0' significa che non viene applicata alcuna compensazione.",
+
+    "InfillFactorLabelID": "Fattore di Linear Advance del riempimento",
+    "InfillFactorDescriptionID": "Il fattore di Linear Advance Factor utilizzato durante la stampa del riempimento. Il valore '0' indica che per questa caratteristica non viene applicata alcuna compensazione.",
+
+    "WallFactorLabelID": "Fattore di Linear Advance delle pareti",
+    "WallFactorDescriptionID": "Il fattore di Linear Advance utilizzato durante la stampa di pareti. Il valore '0' indica che per questa caratteristica non viene applicata alcuna compensazione.",
+
+    "OuterWallFactorLabelID": "Fattore di Linear Advance della parete esterna",
+    "OuterWallFactorDescriptionID": "Il fattore di Linear Advance utilizzato durante la stampa della parete più esterna. Il valore '0' indica che per questa caratteristica non viene applicata alcuna compensazione.",
+
+    "InnerWallFactorLabelID": "Fattore di Linear Advance della parete interna",
+    "InnerWallFactorLabelDescriptionID": "Il fattore di Linear Advance utilizzato per la stampa di tutte le pareti interne. Il valore '0' indica che per questa caratteristica non viene applicata alcuna compensazione.",
+
+    "TopBottomFactorLabelID": "Fattore di Linear Advance dello strato Superiore/Inferiore",
+    "TopBottomFactorLabelDescriptionID": "Il fattore di Linear Advance utilizzato per la stampa dello strato superiore/inferiore. Il valore '0' indica che per questa caratteristica non viene applicata alcuna compensazione.",
+
+    "SupportFactorLabelID": "Fattore di Linear Advance del supporto",
+    "SupportFactorLabelDescriptionID": "Il fattore di Linear Advance utilizzato durante la stampa delle strutture di supporto. Il valore '0' indica che per questa caratteristica non viene applicata alcuna compensazione.",
+
+    "SupportInterfaceFactorID": "Fattore di Linear Advance dell'interfaccia supporto",
+    "SupportInterfaceFactorDescriptionID": "Il fattore di Linear Advance utilizzato per la stampa dell'interfacca di supporto. Il valore '0' indica che per questa caratteristica non viene applicata alcuna compensazione.",
+
+    "PrimeTowerFactorID": "Fattore di Linear Advance della torre di innesco",
+    "PrimeTowerFactorDescriptionID": "Il fattore di Linear Advance utilizzato durante la stampa della torre di innesco. Il valore '0' indica che per questa caratteristica non viene applicata alcuna compensazione.",
+
+    "SkirtBrimFactorID": "Fattore di Linear Advance dello Skirt/Brim",
+    "SkirtBrimFactorDescriptionID": "Il fattore di Linear Advance utilizzato per la stampa di Skirts/Brim. Il valore '0' indica che per questa caratteristica non viene applicata alcuna compensazione.",
+
+    "InitialLayerFactorLabelID": "Fattore di Linear Advance dello strato iniziale",
+    "InitialLayerFactorLabelDescriptionID": "Il fattore di avanzamento lineare utilizzato durante la stampa del primo livello. Il valore '0' indica che per questa caratteristica non viene applicata alcuna compensazione."
+}

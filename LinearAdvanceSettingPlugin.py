@@ -29,6 +29,7 @@ class LinearAdvanceSettingPlugin(Extension):
 
         self._i18n_catalog = None  # type: Optional[i18nCatalog]
 
+        self._language_dict = {}  # type: List[str]  # temporary list used to translate settings labels/descriptions
         self._settings_dict = {}  # type: Dict[str, Any]
         self._expanded_categories = []  # type: List[str]  # temporary list used while creating nested settings
 
@@ -39,6 +40,19 @@ class LinearAdvanceSettingPlugin(Extension):
             # Since this plugin version is only compatible with Cura 3.5 and newer, and no version-granularity
             # is required before Cura 4.7, it is safe to assume API 5
             api_version = Version(5)
+
+        language_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Languages")
+
+        languageFile = "English.json"
+        language_definitions_path = os.path.join(language_path, languageFile)
+        if not os.path.exists(language_definitions_path):
+            language_definitions_path = os.path.join(language_path, "English.json")
+        try:
+            with open(language_definitions_path, "r", encoding = "utf-8") as f:
+                self._language_dict = json.load(f)
+        except:
+            Logger.logException("e", "Could not load linear advance language definition")
+            return
 
         if api_version < Version("7.3.0"):
             settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance35.def.json")
@@ -51,8 +65,12 @@ class LinearAdvanceSettingPlugin(Extension):
             Logger.logException("e", "Could not load linear advance settings definition")
             return
 
+        # Translate settings
+        #self.TransateSettings(self._settings_dict)
+
         ContainerRegistry.getInstance().containerLoadComplete.connect(self._onContainerLoadComplete)
         self._application.getOutputDeviceManager().writeStarted.connect(self._filterGcode)
+
 
     def _onContainerLoadComplete(self, container_id: str) -> None:
         if not ContainerRegistry.getInstance().isLoaded(container_id):
@@ -93,6 +111,15 @@ class LinearAdvanceSettingPlugin(Extension):
             self._application.setExpandedCategories(self._expanded_categories)
             self._expanded_categories = []  # type: List[str]
             container._updateRelations(setting_definition)
+
+    def TransateSettings(self, node:collections.OrderedDict) -> None:
+        for child in node:
+            nodeValue = node[child]
+            if type(nodeValue) is collections.OrderedDict:
+                self.TransateSettings(nodeValue)
+            elif type(nodeValue) is str:
+                if nodeValue in self._language_dict:
+                    node[child] = self._language_dict[nodeValue]
 
     def _updateAddedChildren(self, container: DefinitionContainer, setting_definition: SettingDefinition) -> None:
         children = setting_definition.children

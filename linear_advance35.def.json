@@ -1,8 +1,8 @@
 {
     "material_linear_advance_enable":
     {
-        "label": "Enable Linear Advance",
-        "description": "Enables adjusting the linear advance factors in the g-code.",
+        "label": "EnableLabelID",
+        "description": "EnableDescriptionID",
         "type": "bool",
         "default_value": false,
         "settable_per_mesh": false,
@@ -10,8 +10,8 @@
         "settable_per_meshgroup": false
     },
     "material_linear_advance_factor": {
-        "label": "Linear Advance Factor",
-        "description": "Sets the advance extrusion factor for Linear Advance. A value of '0' means no linear advance compensation is applied.",
+        "label": "FactorLabelID",
+        "description": "FactorDescriptionID",
         "type": "float",
         "default_value": 0,
         "minimum_value": "0",
@@ -22,8 +22,8 @@
         "enabled": "resolveOrValue('material_linear_advance_enable')",
         "children": {
             "material_linear_advance_factor_infill": {
-                "label": "Infill Linear Advance Factor",
-                "description": "The Linear Advance Factor used when printing infill. A value of '0' means no linear advance compensation is applied for this feature.",
+                "label": "InfillFactorLabelID",
+                "description": "InfillFactorDescriptionID",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -36,8 +36,8 @@
                 "limit_to_extruder": "infill_extruder_nr"
             },
             "material_linear_advance_factor_wall": {
-                "label": "Wall Linear Advance Factor",
-                "description": "The Linear Advance Factor used when printing walls. A value of '0' means no linear advance compensation is applied for this feature.",
+                "label": "WallFactorLabelID",
+                "description": "WallFactorDescriptionID",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -49,8 +49,8 @@
                 "enabled": "resolveOrValue('material_linear_advance_enable')",
                 "children": {
                     "material_linear_advance_factor_wall_0": {
-                        "label": "Outer Wall Linear Advance Factor",
-                        "description": "The Linear Advance Factor used when printing the outermost wall. A value of '0' means no linear advance compensation is applied for this feature.",
+                        "label": "OuterWallFactorLabelID",
+                        "description": "OuterWallFactorDescriptionID",
                         "type": "float",
                         "default_value": 0,
                         "minimum_value": "0",
@@ -63,8 +63,8 @@
                         "limit_to_extruder": "wall_0_extruder_nr"
                     },
                     "material_linear_advance_factor_wall_x": {
-                        "label": "Inner Wall Linear Advance Factor",
-                        "description": "The Linear Advance Factor used when printing all inner walls. A value of '0' means no linear advance compensation is applied for this feature.",
+                        "label": "InnerWallFactorLabelID",
+                        "description": "InnerWallFactorLabelDescriptionID",
                         "type": "float",
                         "default_value": 0,
                         "minimum_value": "0",
@@ -79,8 +79,8 @@
                 }
             },
             "material_linear_advance_factor_topbottom": {
-                "label": "Top/Bottom Skin Linear Advance Factor",
-                "description": "The Linear Advance Factor used when printing top/bottom skin layers. A value of '0' means no linear advance compensation is applied for this feature.",
+                "label": "TopBottomFactorLabelID",
+                "description": "TopBottomFactorLabelDescriptionID",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -93,8 +93,8 @@
                 "limit_to_extruder": "top_bottom_extruder_nr"
             },
             "material_linear_advance_factor_support": {
-                "label": "Support Linear Advance Factor",
-                "description": "The Linear Advance Factor used when printing support structures. A value of '0' means no linear advance compensation is applied for this feature.",
+                "label": "SupportFactorLabelID",
+                "description": "SupportFactorLabelDescriptionID",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -107,8 +107,8 @@
                 "limit_to_extruder": "support_extruder_nr"
             },
             "material_linear_advance_factor_support_interface": {
-                "label": "Support Interface Linear Advance Factor",
-                "description": "The Linear Advance Factor used when printing support interfaces. A value of '0' means no linear advance compensation is applied for this feature.",
+                "label": "SupportInterfaceFactorID",
+                "description": "SupportInterfaceFactorDescriptionID",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -121,8 +121,8 @@
                 "limit_to_extruder": "support_interface_extruder_nr"
             },
             "material_linear_advance_factor_prime_tower": {
-                "label": "Prime Tower Linear Advance Factor",
-                "description": "The Linear Advance Factor used when printing the prime tower. A value of '0' means no linear advance compensation is applied for this feature.",
+                "label": "PrimeTowerFactorID",
+                "description": "PrimeTowerFactorDescriptionID",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -134,8 +134,8 @@
                 "enabled": "resolveOrValue('material_linear_advance_enable') and resolveOrValue('prime_tower_enable')"
             },
             "material_linear_advance_factor_skirt_brim": {
-                "label": "Skirt/Brim Linear Advance Factor",
-                "description": "The Linear Advance Factor used when printing adhesion skirts or brims. A value of '0' means no linear advance compensation is applied for this feature.",
+                "label": "SkirtBrimFactorID",
+                "description": "SkirtBrimFactorDescriptionID",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",
@@ -148,8 +148,8 @@
                 "limit_to_extruder": "adhesion_extruder_nr"
             },
             "material_linear_advance_factor_layer_0": {
-                "label": "Initial Layer Linear Advance Factor",
-                "description": "The Linear Advance Factor used when printing the first layer. A value of '0' means no linear advance compensation is applied for this feature.",
+                "label": "InitialLayerFactorLabelID",
+                "description": "InitialLayerFactorLabelDescriptionID",
                 "type": "float",
                 "default_value": 0,
                 "minimum_value": "0",

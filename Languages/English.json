@@ -1,0 +1,37 @@
+{
+    "EnableLabelID": "Enable Linear Advance",
+    "EnableDescriptionID": "Enables adjusting the linear advance factors in the g-code.",
+
+    "FactorLabelID": "Linear Advance Factor",
+    "FactorDescriptionID": "Sets the advance extrusion factor for Linear Advance. A value of '0' means no linear advance compensation is applied.",
+
+    "InfillFactorLabelID": "Infill Linear Advance Factor",
+    "InfillFactorDescriptionID": "The Linear Advance Factor used when printing infill. A value of '0' means no linear advance compensation is applied for this feature.",
+
+    "WallFactorLabelID": "Wall Linear Advance Factor",
+    "WallFactorDescriptionID": "The Linear Advance Factor used when printing walls. A value of '0' means no linear advance compensation is applied for this feature.",
+
+    "OuterWallFactorLabelID": "Outer Wall Linear Advance Factor",
+    "OuterWallFactorDescriptionID": "The Linear Advance Factor used when printing the outermost wall. A value of '0' means no linear advance compensation is applied for this feature.",
+
+    "InnerWallFactorLabelID": "Inner Wall Linear Advance Factor",
+    "InnerWallFactorLabelDescriptionID": "The Linear Advance Factor used when printing all inner walls. A value of '0' means no linear advance compensation is applied for this feature.",
+
+    "TopBottomFactorLabelID": "Top/Bottom Skin Linear Advance Factor",
+    "TopBottomFactorLabelDescriptionID": "The Linear Advance Factor used when printing top/bottom skin layers. A value of '0' means no linear advance compensation is applied for this feature.",
+
+    "SupportFactorLabelID": "Support Linear Advance Factor",
+    "SupportFactorLabelDescriptionID": "The Linear Advance Factor used when printing support structures. A value of '0' means no linear advance compensation is applied for this feature.",
+
+    "SupportInterfaceFactorID": "Support Interface Linear Advance Factor",
+    "SupportInterfaceFactorDescriptionID": "The Linear Advance Factor used when printing support interfaces. A value of '0' means no linear advance compensation is applied for this feature.",
+
+    "PrimeTowerFactorID": "Prime Tower Linear Advance Factor",
+    "PrimeTowerFactorDescriptionID": "The Linear Advance Factor used when printing the prime tower. A value of '0' means no linear advance compensation is applied for this feature.",
+
+    "SkirtBrimFactorID": "Skirt/Brim Linear Advance Factor",
+    "SkirtBrimFactorDescriptionID": "The Linear Advance Factor used when printing adhesion skirts or brims. A value of '0' means no linear advance compensation is applied for this feature.",
+
+    "InitialLayerFactorLabelID": "Initial Layer Linear Advance Factor",
+    "InitialLayerFactorLabelDescriptionID": "The Linear Advance Factor used when printing the first layer. A value of '0' means no linear advance compensation is applied for this feature."
+}
