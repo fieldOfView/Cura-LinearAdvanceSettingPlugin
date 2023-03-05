@@ -44,7 +44,7 @@ class LinearAdvanceSettingPlugin(Extension):
             settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance47.def.json")
         try:
             with open(settings_definition_path, "r", encoding = "utf-8") as f:
-                self._settings_dict = json.load(f, object_pairs_hook = collections.OrderedDict)
+                self._settings_dict = json.load(f, object_pairs_hook = collections.OrderedDict)["settings"]
         except:
             Logger.logException("e", "Could not load linear advance settings definition")
             return
