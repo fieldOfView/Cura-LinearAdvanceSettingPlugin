@@ -8,9 +8,7 @@ from UM.Version import Version
 from UM.Settings.SettingDefinition import SettingDefinition
 from UM.Settings.DefinitionContainer import DefinitionContainer
 from UM.Settings.ContainerRegistry import ContainerRegistry
-
 from UM.i18n import i18nCatalog
-i18n_catalog = i18nCatalog("LinearAdvanceSettingPlugin")
 
 import collections
 import json
@@ -27,7 +25,7 @@ class LinearAdvanceSettingPlugin(Extension):
 
         self._application = CuraApplication.getInstance()
 
-        self._i18n_catalog = None  # type: Optional[i18nCatalog]
+        self._i18n_catalog = i18nCatalog("linearadvancesettingplugin")
 
         self._settings_dict = {}  # type: Dict[str, Any]
         self._expanded_categories = []  # type: List[str]  # temporary list used while creating nested settings
