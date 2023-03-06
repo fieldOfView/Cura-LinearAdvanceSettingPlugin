@@ -1,0 +1,194 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-05 16:37+0000\n"
+"PO-Revision-Date: 2023-03-05 20:31+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_enable label"
+msgid "Enable Linear Advance"
+msgstr "Abilita Linear Advance"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_enable description"
+msgid "Enables adjusting the linear advance factors in the g-code."
+msgstr "Consente di regolare il fattore di Linear Advance nel g-code."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor label"
+msgid "Linear Advance Factor"
+msgstr "Fattore di Linear Advance"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor description"
+msgid ""
+"Sets the advance extrusion factor for Linear Advance. A value of '0' means "
+"no linear advance compensation is applied."
+msgstr ""
+"Imposta il fattore di estrusione avanzato per Linear Advance. Un valore pari "
+"a '0' significa che non viene applicata alcuna compensazione."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_infill label"
+msgid "Infill Linear Advance Factor"
+msgstr "Fattore di Linear Advance del riempimento"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_infill description"
+msgid ""
+"The Linear Advance Factor used when printing infill. A value of '0' means no "
+"linear advance compensation is applied for this feature."
+msgstr ""
+"Il fattore di Linear Advance Factor utilizzato durante la stampa del "
+"riempimento. Il valore '0' indica che per questa caratteristica non viene "
+"applicata alcuna compensazione."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall label"
+msgid "Wall Linear Advance Factor"
+msgstr "Fattore di Linear Advance delle pareti"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall description"
+msgid ""
+"The Linear Advance Factor used when printing walls. A value of '0' means no "
+"linear advance compensation is applied for this feature."
+msgstr ""
+"Il fattore di Linear Advance utilizzato durante la stampa di pareti. Il "
+"valore '0' indica che per questa caratteristica non viene applicata alcuna "
+"compensazione."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall_0 label"
+msgid "Outer Wall Linear Advance Factor"
+msgstr "Fattore di Linear Advance della parete esterna"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall_0 description"
+msgid ""
+"The Linear Advance Factor used when printing the outermost wall. A value of "
+"'0' means no linear advance compensation is applied for this feature."
+msgstr ""
+"Il fattore di Linear Advance utilizzato durante la stampa della parete più "
+"esterna. Il valore '0' indica che per questa caratteristica non viene "
+"applicata alcuna compensazione."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall_x label"
+msgid "Inner Wall Linear Advance Factor"
+msgstr "Fattore di Linear Advance della parete interna"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall_x description"
+msgid ""
+"The Linear Advance Factor used when printing all inner walls. A value of '0' "
+"means no linear advance compensation is applied for this feature."
+msgstr ""
+"Il fattore di Linear Advance utilizzato per la stampa di tutte le pareti "
+"interne. Il valore '0' indica che per questa caratteristica non viene "
+"applicata alcuna compensazione."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_topbottom label"
+msgid "Top/Bottom Skin Linear Advance Factor"
+msgstr "Fattore di Linear Advance dello strato superiore/inferiore"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_topbottom description"
+msgid ""
+"The Linear Advance Factor used when printing top/bottom skin layers. A value "
+"of '0' means no linear advance compensation is applied for this feature."
+msgstr ""
+"Il fattore di Linear Advance utilizzato per la stampa dello strato superiore/"
+"inferiore. Il valore '0' indica che per questa caratteristica non viene "
+"applicata alcuna compensazione."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_support label"
+msgid "Support Linear Advance Factor"
+msgstr "Fattore di Linear Advance del supporto"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_support description"
+msgid ""
+"The Linear Advance Factor used when printing support structures. A value of "
+"'0' means no linear advance compensation is applied for this feature."
+msgstr ""
+"Il fattore di Linear Advance utilizzato durante la stampa delle strutture di "
+"supporto. Il valore '0' indica che per questa caratteristica non viene "
+"applicata alcuna compensazione."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_support_interface label"
+msgid "Support Interface Linear Advance Factor"
+msgstr "Fattore di Linear Advance dell'interfaccia supporto"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_support_interface description"
+msgid ""
+"The Linear Advance Factor used when printing support interfaces. A value of "
+"'0' means no linear advance compensation is applied for this feature."
+msgstr ""
+"Il fattore di Linear Advance utilizzato per la stampa dell'interfacca di "
+"supporto. Il valore '0' indica che per questa caratteristica non viene "
+"applicata alcuna compensazione."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_prime_tower label"
+msgid "Prime Tower Linear Advance Factor"
+msgstr "Fattore di Linear Advance della torre di innesco"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_prime_tower description"
+msgid ""
+"The Linear Advance Factor used when printing the prime tower. A value of '0' "
+"means no linear advance compensation is applied for this feature."
+msgstr ""
+"Il fattore di Linear Advance utilizzato durante la stampa della torre di "
+"innesco. Il valore '0' indica che per questa caratteristica non viene "
+"applicata alcuna compensazione."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_skirt_brim label"
+msgid "Skirt/Brim Linear Advance Factor"
+msgstr "Fattore di Linear Advance dello skirt/brim"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_skirt_brim description"
+msgid ""
+"The Linear Advance Factor used when printing adhesion skirts or brims. A "
+"value of '0' means no linear advance compensation is applied for this "
+"feature."
+msgstr ""
+"Il fattore di Linear Advance utilizzato per la stampa di skirts/brim. Il "
+"valore '0' indica che per questa caratteristica non viene applicata alcuna "
+"compensazione."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_layer_0 label"
+msgid "Initial Layer Linear Advance Factor"
+msgstr "Fattore di Linear Advance dello strato iniziale"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_layer_0 description"
+msgid ""
+"The Linear Advance Factor used when printing the first layer. A value of '0' "
+"means no linear advance compensation is applied for this feature."
+msgstr ""
+"Il fattore di avanzamento lineare utilizzato durante la stampa del primo "
+"livello. Il valore '0' indica che per questa caratteristica non viene "
+"applicata alcuna compensazione."
