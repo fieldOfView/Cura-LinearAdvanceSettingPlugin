@@ -8,13 +8,14 @@ from UM.Version import Version
 from UM.Settings.SettingDefinition import SettingDefinition
 from UM.Settings.DefinitionContainer import DefinitionContainer
 from UM.Settings.ContainerRegistry import ContainerRegistry
+from UM.Resources import Resources
 from UM.i18n import i18nCatalog
 
 import collections
 import json
 import os.path
 
-from typing import List, Optional, Any, Dict, TYPE_CHECKING
+from typing import List, Any, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from UM.OutputDevice.OutputDevice import OutputDevice
@@ -25,6 +26,9 @@ class LinearAdvanceSettingPlugin(Extension):
 
         self._application = CuraApplication.getInstance()
 
+        Resources.addSearchPath(
+            os.path.abspath(os.path.dirname(__file__))
+        )  # Plugin translation file import
         self._i18n_catalog = i18nCatalog("linearadvancesettingplugin")
 
         self._settings_dict = {}  # type: Dict[str, Any]
@@ -49,8 +53,23 @@ class LinearAdvanceSettingPlugin(Extension):
             Logger.logException("e", "Could not load linear advance settings definition")
             return
 
+        if self._i18n_catalog.hasTranslationLoaded():
+            # Apply translation to loaded dict, because the setting definition model
+            # does not deal well with translations from plugins
+            self._translateSettings(self._settings_dict)
+
         ContainerRegistry.getInstance().containerLoadComplete.connect(self._onContainerLoadComplete)
         self._application.getOutputDeviceManager().writeStarted.connect(self._filterGcode)
+
+    def _translateSettings(self, json_root: Dict[str, Any]) -> None:
+        for key in json_root:
+            json_root[key]["label"] = self._i18n_catalog.i18nc(key + " label", json_root[key]["label"])
+            json_root[key]["description"] = self._i18n_catalog.i18nc(key + " description", json_root[key]["description"])
+
+            # TODO: handle options from comboboxes (not that this plugin has any)
+
+            if "children" in json_root[key]:
+                self._translateSettings(json_root[key]["children"])
 
     def _onContainerLoadComplete(self, container_id: str) -> None:
         if not ContainerRegistry.getInstance().isLoaded(container_id):
@@ -97,7 +116,7 @@ class LinearAdvanceSettingPlugin(Extension):
         if not children or not setting_definition.parent:
             return
 
-        # make sure this setting is expanded so its children show up  in setting views
+        # make sure this setting is expanded so its children show up in setting views
         if setting_definition.parent.key in self._expanded_categories:
             self._expanded_categories.append(setting_definition.key)
 
