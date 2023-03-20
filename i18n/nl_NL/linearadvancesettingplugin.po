@@ -1,0 +1,192 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-05 16:37+0000\n"
+"PO-Revision-Date: 2023-03-20 15:28+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_enable label"
+msgid "Enable Linear Advance"
+msgstr "Linear Advance inschakelen"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_enable description"
+msgid "Enables adjusting the linear advance factors in the g-code."
+msgstr "Schakelt het invoegen van linear advance factoren in de g-code in"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor label"
+msgid "Linear Advance Factor"
+msgstr "Linear Advance factor"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor description"
+msgid ""
+"Sets the advance extrusion factor for Linear Advance. A value of '0' means "
+"no linear advance compensation is applied."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance. De waarde '0' zorgt er "
+"voor dat geen Linear Advance compensatie wordt uitgevoerd."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_infill label"
+msgid "Infill Linear Advance Factor"
+msgstr "Linear Advance voor vulling"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_infill description"
+msgid ""
+"The Linear Advance Factor used when printing infill. A value of '0' means no "
+"linear advance compensation is applied for this feature."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance van  vulling. De waarde "
+"'0' zorgt er voor dat geen Linear Advance compensatie wordt uitgevoerd."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall label"
+msgid "Wall Linear Advance Factor"
+msgstr "Linear Advance voor wanden"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall description"
+msgid ""
+"The Linear Advance Factor used when printing walls. A value of '0' means no "
+"linear advance compensation is applied for this feature."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance van wanden. De waarde '0' "
+"zorgt er voor dat geen Linear Advance compensatie wordt uitgevoerd."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall_0 label"
+msgid "Outer Wall Linear Advance Factor"
+msgstr "Linear Advance voor buitenste wand"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall_0 description"
+msgid ""
+"The Linear Advance Factor used when printing the outermost wall. A value of "
+"'0' means no linear advance compensation is applied for this feature."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance van de buitenste wand. De "
+"waarde '0' zorgt er voor dat geen Linear Advance compensatie wordt "
+"uitgevoerd."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall_x label"
+msgid "Inner Wall Linear Advance Factor"
+msgstr "Linear Advance voor binnenwanden"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_wall_x description"
+msgid ""
+"The Linear Advance Factor used when printing all inner walls. A value of '0' "
+"means no linear advance compensation is applied for this feature."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance van binnenwanden. De "
+"waarde '0' zorgt er voor dat geen Linear Advance compensatie wordt "
+"uitgevoerd."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_topbottom label"
+msgid "Top/Bottom Skin Linear Advance Factor"
+msgstr "Linear Advance voor boven- & onderkant"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_topbottom description"
+msgid ""
+"The Linear Advance Factor used when printing top/bottom skin layers. A value "
+"of '0' means no linear advance compensation is applied for this feature."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance van oner- en bovenkanten. "
+"De waarde '0' zorgt er voor dat geen Linear Advance compensatie wordt "
+"uitgevoerd."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_support label"
+msgid "Support Linear Advance Factor"
+msgstr "Linear Advance voor ondersteuning"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_support description"
+msgid ""
+"The Linear Advance Factor used when printing support structures. A value of "
+"'0' means no linear advance compensation is applied for this feature."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance van "
+"ondersteuningsstructuren. De waarde '0' zorgt er voor dat geen Linear "
+"Advance compensatie wordt uitgevoerd."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_support_interface label"
+msgid "Support Interface Linear Advance Factor"
+msgstr "Linear Advance voor verbingingsstructuur"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_support_interface description"
+msgid ""
+"The Linear Advance Factor used when printing support interfaces. A value of "
+"'0' means no linear advance compensation is applied for this feature."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance voor  "
+"verbindingsstructuren. De waarde '0' zorgt er voor dat geen Linear Advance "
+"compensatie wordt uitgevoerd."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_prime_tower label"
+msgid "Prime Tower Linear Advance Factor"
+msgstr "Linear Advance voor primepijler"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_prime_tower description"
+msgid ""
+"The Linear Advance Factor used when printing the prime tower. A value of '0' "
+"means no linear advance compensation is applied for this feature."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance van primepeilers. De "
+"waarde '0' zorgt er voor dat geen Linear Advance compensatie wordt "
+"uitgevoerd."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_skirt_brim label"
+msgid "Skirt/Brim Linear Advance Factor"
+msgstr "Linear Advance voor skirt/brim"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_skirt_brim description"
+msgid ""
+"The Linear Advance Factor used when printing adhesion skirts or brims. A "
+"value of '0' means no linear advance compensation is applied for this "
+"feature."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance van de skirt of brim. De "
+"waarde '0' zorgt er voor dat geen Linear Advance compensatie wordt "
+"uitgevoerd."
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_layer_0 label"
+msgid "Initial Layer Linear Advance Factor"
+msgstr "Linear Advance voor eerste laag"
+
+#: linear_advance35.def.json linear_advance47.def.json
+msgctxt "material_linear_advance_factor_layer_0 description"
+msgid ""
+"The Linear Advance Factor used when printing the first layer. A value of '0' "
+"means no linear advance compensation is applied for this feature."
+msgstr ""
+"Stelt the extrusive factor in voor Linear Advance van de eerste laag. De "
+"waarde '0' zorgt er voor dat geen Linear Advance compensatie wordt "
+"uitgevoerd."
