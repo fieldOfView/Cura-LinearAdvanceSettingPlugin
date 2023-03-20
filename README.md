@@ -7,8 +7,8 @@ For more information about Pressure Advance, see the Duet documentation: https:/
 
 Users of Klipper can add the following lines to their `printer.cfg`:
 ```
-[gcode_macro m900]
-default_parameter_K: 0
+[gcode_macro M900]
 gcode:
+  {% set K = params.K|default(0)|float %}
   SET_PRESSURE_ADVANCE ADVANCE={K}
 ```
