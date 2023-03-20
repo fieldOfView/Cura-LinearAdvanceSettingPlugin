@@ -7,8 +7,9 @@
             "description": "Enables adjusting the linear advance factors in the g-code.",
             "type": "bool",
             "default_value": false,
+            "resolve": "any(extruderValues('material_linear_advance_enable'))",
             "settable_per_mesh": false,
-            "settable_per_extruder": true,
+            "settable_per_extruder": false,
             "settable_per_meshgroup": false
         },
         "material_linear_advance_factor": {
