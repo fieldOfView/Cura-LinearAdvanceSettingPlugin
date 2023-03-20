@@ -8,7 +8,7 @@
             "type": "bool",
             "default_value": false,
             "settable_per_mesh": false,
-            "settable_per_extruder": false,
+            "settable_per_extruder": true,
             "settable_per_meshgroup": false
         },
         "material_linear_advance_factor": {
