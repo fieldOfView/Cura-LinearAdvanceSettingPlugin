@@ -20,6 +20,7 @@ from typing import List, Any, Dict, TYPE_CHECKING
 if TYPE_CHECKING:
     from UM.OutputDevice.OutputDevice import OutputDevice
 
+
 class LinearAdvanceSettingPlugin(Extension):
     def __init__(self) -> None:
         super().__init__()
@@ -43,13 +44,22 @@ class LinearAdvanceSettingPlugin(Extension):
             api_version = Version(5)
 
         if api_version < Version("7.3.0"):
-            settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance35.def.json")
+            settings_definition_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                "linear_advance35.def.json"
+            )
         else:
-            settings_definition_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "linear_advance47.def.json")
+            settings_definition_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                "linear_advance47.def.json"
+            )
+
         try:
             with open(settings_definition_path, "r", encoding = "utf-8") as f:
-                self._settings_dict = json.load(f, object_pairs_hook = collections.OrderedDict)["settings"]
-        except:
+                self._settings_dict = json.load(
+                    f, object_pairs_hook=collections.OrderedDict
+                )["settings"]
+        except Exception:
             Logger.logException("e", "Could not load linear advance settings definition")
             return
 
@@ -63,8 +73,12 @@ class LinearAdvanceSettingPlugin(Extension):
 
     def _translateSettings(self, json_root: Dict[str, Any]) -> None:
         for key in json_root:
-            json_root[key]["label"] = self._i18n_catalog.i18nc(key + " label", json_root[key]["label"])
-            json_root[key]["description"] = self._i18n_catalog.i18nc(key + " description", json_root[key]["description"])
+            json_root[key]["label"] = self._i18n_catalog.i18nc(
+                key + " label", json_root[key]["label"]
+            )
+            json_root[key]["description"] = self._i18n_catalog.i18nc(
+                key + " description", json_root[key]["description"]
+            )
 
             # TODO: handle options from comboboxes (not that this plugin has any)
 
@@ -96,7 +110,9 @@ class LinearAdvanceSettingPlugin(Extension):
             return
 
         for setting_key in self._settings_dict.keys():
-            setting_definition = SettingDefinition(setting_key, container, material_category, self._i18n_catalog)
+            setting_definition = SettingDefinition(
+                setting_key, container, material_category, self._i18n_catalog
+            )
             setting_definition.deserialize(self._settings_dict[setting_key])
 
             # add the setting to the already existing material settingdefinition
@@ -136,7 +152,7 @@ class LinearAdvanceSettingPlugin(Extension):
             return
 
         gcode_dict = getattr(scene, "gcode_dict", {})
-        if not gcode_dict: # this also checks for an empty dict
+        if not gcode_dict:  # this also checks for an empty dict
             Logger.log("w", "Scene has no gcode to process")
             return
 
@@ -170,7 +186,7 @@ class LinearAdvanceSettingPlugin(Extension):
                 extruder_nr = int(extruder_stack.getProperty("extruder_nr", "value"))
                 linear_advance_factor = extruder_stack.getProperty(setting_key, "value")
 
-                gcode_list[1] = gcode_list[1] + gcode_command_pattern % (linear_advance_factor, extruder_nr) + "\n"
+                gcode_list[1] += gcode_command_pattern % (linear_advance_factor, extruder_nr) + "\n"
 
                 dict_changed = True
 
